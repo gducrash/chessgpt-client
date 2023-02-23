@@ -1,0 +1,54 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(column, center, center);
+    padding: 48px;
+    background: $colorBg1;
+    width: 100%;
+
+    .content {
+        @include fillWidthUntil(900px);
+        @include flex(column, center, center, 12px);
+        text-align: center;
+
+        h1 {
+            @include flex(row, center, center, 10px);
+            color: $colorTextAction;
+            font-size: 32px;
+            font-weight: 500;
+        }
+
+        .badge {
+            font-size: 12px;
+            display: inline-block;
+            padding: 4px 8px;
+            background: $colorBg2;
+            color: $colorPrimary;
+            border-radius: 4px;
+        }
+
+        p {
+            color: $colorTextHint;
+            font-size: 18px;
+        }
+    }
+}
+
+.message {
+    padding: 16px 24px;
+    border-radius: 4px;
+    font-weight: 500;
+    max-width: 640px;
+    margin-top: 16px;
+    &.warn {
+        background: rgba($colorSecondaryWarn, 0.3);
+        color: $colorSecondaryWarn;
+        box-shadow: 0 0 20px rgba($colorSecondaryWarn, 0.1);
+    }
+    &.error {
+        background: rgba($colorSecondaryDanger, 0.4);
+        color: lighten($colorSecondaryDanger, 30%);
+        box-shadow: 0 0 20px rgba($colorSecondaryDanger, 0.25);
+    }
+}

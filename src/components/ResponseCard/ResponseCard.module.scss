@@ -1,0 +1,131 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.card {
+    width: 100%;
+    background: $colorBgCard;
+    border-radius: 16px;
+    position: relative;
+    transition: 0.25s ease opacity;
+
+    @media screen and (max-height: 800px) {
+        border-radius: 8px;
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        user-select: none;
+        pointer-events: none;
+    }
+
+    &.error {
+        background: $colorBgCardError;
+    }
+
+    &.loading .col {
+        filter: blur(8px);
+    }
+
+    .col {
+        @include flex(row, flex-start, center, 32px);
+        padding: 32px;
+        width: 100%;
+        transition: filter 0.25s ease;
+
+        @media screen and (max-width: 1000px) {
+            flex-direction: column;
+        }
+
+        @media screen and (max-height: 800px) {
+            padding: 16px 24px;
+            gap: 16px;
+        }
+    }
+
+    .avatar {
+        height: 60px;
+
+        @media screen and (max-width: 1000px) {
+            height: 40px;
+        }
+        @media screen and (max-height: 800px) {
+            height: 40px;
+        }
+    }
+
+    .text {
+        font-size: 20px;
+        font-weight: 500;
+
+        @media screen and (max-height: 800px) {
+            font-size: 16px;
+        }
+
+        span {
+            animation: textAppear 0.2s ease-out;
+            animation-fill-mode: backwards;
+        }
+    }
+
+    .error {
+        background: $colorSecondaryDanger;
+        color: $colorTextAction;
+        text-align: center;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 10px 32px;
+        border-radius: 0 0 16px 16px;
+        @media screen and (max-height: 800px) {
+            font-size: 12px;
+        }
+    }
+
+    .loading {
+        @include flex(row, center, center, 24px);
+        font-weight: 600;
+        font-size: 32px;
+        color: $colorTextAction;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        background: rgba(0,0,0,.5);
+        animation: textAppear 0.5s ease;
+        border-radius: 16px;
+
+        @media screen and (max-width: 1000px) {
+            span {
+                display: none;
+            }
+        }
+        @media screen and (max-height: 800px) {
+            font-size: 20px;
+        }
+    }
+}
+
+.loader {
+    display: block;
+    width: 32px;
+    height: 32px;
+    border-radius: 100%;
+    border: 6px solid currentColor;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes textAppear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

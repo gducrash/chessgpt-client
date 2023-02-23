@@ -1,0 +1,155 @@
+@import './styles/variables.scss';
+@import './styles/mixins.scss';
+
+:root {
+    color-scheme: dark;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body, #root {
+    min-height: 100%;
+}
+
+body {
+    background: $colorBg0;
+    color: $colorTextNormal;
+    font-family: system-ui, -apple-system, sans-serif;
+    font-size: 16px;
+}
+
+#root {
+    @include flex(row, flex-start, stretch);
+}
+
+
+input {
+    @include clearDefaultStyle;
+
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: $colorTextAction;
+    background: $colorBg1;
+    border: 1px solid $colorBg2;
+    transition: border-color 0.25s ease;
+
+    &:focus {
+        border-color: $colorSecondaryInfo;
+    }
+    &::placeholder {
+        color: rgba($colorTextHint, 0.5);
+    }
+}
+
+
+.content {
+    @include flex(column, flex-start, center, 48px);
+    width: 100%;
+    > * {
+        flex-shrink: 0;
+    }
+}
+
+.row {
+    @include flex(row, center, stretch, 48px);
+    width: 100%;
+    padding: 0 48px;
+
+    @media screen and (max-width: 1340px) {
+        align-items: center;
+        flex-direction: column;
+    }
+}
+
+.col {
+    @include flex(column, center, stretch, 16px);
+    width: 100%;
+}
+
+.contentBlock {
+    @include flex(column, space-between, flex-start, 20px);
+    @include fillWidthUntil(500px);
+
+    transition: 0.5s ease margin;
+    z-index: -1;
+
+    > * {
+        flex-shrink: 0;
+    }
+
+    &.hidden {
+        margin-left: -550px;
+        pointer-events: none;
+        opacity: 0;
+    }
+
+    @media screen and (max-width: 1340px) {
+        max-width: 640px;
+        flex-direction: column-reverse;
+        &.hidden {
+            margin-left: 0;
+            margin-top: -200px;
+        }
+    }
+
+    @media screen and (max-height: 800px) {
+        max-width: 300px;
+        @media screen and (max-width: 1340px) {
+            max-width: 400px;
+        }
+        &.hidden {
+            margin-left: -350px;
+        }
+        @media screen and (max-width: 1340px) {
+            &.hidden {
+                margin-left: 0;
+            }
+        }
+    }
+
+    
+}
+
+.messageBlock {
+    @include flex(column, flex-start, center, 32px);
+    @include fillWidthUntil(640px);
+    text-align: center;
+    min-height: calc(100vh - 400px);
+    padding: 48px;
+
+    > * {
+        flex-shrink: 0;
+    }
+
+    h1 {
+        color: $colorTextAction;
+        font-weight: 900;
+    }
+    p {
+        width: 80%;
+        font-size: 18px;
+        line-height: 1.75;
+    }
+}
+
+.copyright {
+    @include fillWidthUntil(900px + 96px);
+    color: $colorTextHint;
+    text-align: center;
+    font-size: 14px;
+    line-height: 1.7;
+    padding: 0 48px;
+    margin-bottom: 48px;
+    margin-top: 32px;
+}
+
+a {
+    color: $colorSecondaryInfo;
+    &:hover {
+        color: lighten($colorSecondaryInfo, 25%)
+    }
+}

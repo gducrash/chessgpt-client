@@ -1,0 +1,79 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(row, space-between, center);
+    width: 1188px;
+    background: $colorBg1;
+    padding: 16px 32px;
+    border-radius: 8px;
+    animation: appear 0.5s ease;
+    overflow: hidden;
+    
+    @media screen and (max-height: 800px) {
+        width: 750px;
+    }
+
+    @media screen and (max-width: 1340px) {
+        width: calc(100% - 96px);
+    }
+
+    .infoBlock {
+        @include flex(column, flex-start, flex-start, 8px);
+
+        .row {
+            @include flex(row, flex-start, center, 24px);
+            width: 100%;
+            .infoRow {
+                width: fit-content;
+            }
+        }
+
+        .infoRow {
+            @include flex(row, flex-start, center, 12px);
+            width: 100%;
+
+            .infoRowIcon {
+                @include flex(row, center, center);
+                height: 32px;
+                width: 32px;
+                border-radius: 4px;
+                flex-shrink: 0;
+            }
+            .infoRowText {
+                font-weight: 500;
+                color: $colorTextHint;
+                &.primary {
+                    color: $colorTextNormal;
+                }
+            }
+            .infoRowButton {
+                @include clearDefaultStyle;
+                @include clickable;
+                border-radius: 4px;
+                background: $colorBg2;
+                padding: 4px 8px;
+                font-weight: 600;
+                font-size: 12px;
+                transition: 0.25s ease background;
+                &:hover {
+                    background: lighten($colorBg2, 5%);
+                }
+                &:active {
+                    background: darken($colorBg2, 5%);
+                }
+            }
+        }
+    }
+}
+
+@keyframes appear {
+    from {
+        max-height: 0;
+        padding-top: 0;
+        padding-bottom: 0;
+    }
+    to {
+        max-height: 150px;
+    }
+}

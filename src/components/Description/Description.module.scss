@@ -1,0 +1,57 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(column, center, center);
+    padding: 48px;
+    background: $colorBg1;
+    width: 100%;
+
+    .content {
+        @include fillWidthUntil(900px);
+        @include flex(column, center, center);
+        text-align: center;
+
+        .cards {
+            @include flex(row, center, flex-start, 16px);
+
+            ul {
+                width: calc(300px - 16px);
+                list-style: none;
+            }
+
+            .icon {
+                height: 32px;
+                margin-bottom: 8px;
+            }
+
+            h2 {
+                color: $colorTextAction;
+                font-size: 18px;
+                font-weight: 500;
+                margin-bottom: 16px;
+            }
+
+            li {
+                @include flex(row, center, center);
+                padding: 20px;
+                background: $colorBg2;
+                margin-bottom: 16px;
+                height: 70px;
+                border-radius: 4px;
+            }
+
+            @media screen and (max-width: 1000px) {
+                flex-direction: column;
+                align-items: center;
+                ul {
+                    width: 100%;
+                }
+                li {
+                    font-size: 14px;
+                    height: unset;
+                }
+            }
+        }
+    }
+}

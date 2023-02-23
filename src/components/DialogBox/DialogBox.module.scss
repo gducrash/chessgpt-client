@@ -1,0 +1,94 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(row, center, center);
+    position: fixed;
+    z-index: 100;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba($colorBg2, 0.8);
+    backdrop-filter: blur(10px);
+    animation: bgAppear 0.4s ease;
+    animation-fill-mode: both;
+    padding: 48px;
+
+    &.closing {
+        animation: bgDisappear 0.2s ease;
+        animation-fill-mode: both;
+        pointer-events: none;
+    }
+}
+
+.dialog {
+    @include flex(column, center, flex-start, 16px);
+    min-width: min(100%, 480px);
+    max-width: 640px;
+    background: $colorBg0;
+    padding: 32px;
+    border-radius: 12px;
+    box-shadow: 0 5px 16px rgba(black, 0.3);
+    animation: dialogAppear 0.2s ease;
+    animation-fill-mode: both;
+
+    &.closing {
+        animation: dialogDisappear 0.4s ease;
+        animation-fill-mode: both;
+    }
+
+    .header {
+        padding-bottom: 24px;
+        width: 100%;
+        border-bottom: 1px solid $colorBg2;
+        h2 {     
+            font-size: 24px;
+            font-weight: 800;
+            color: $colorTextAction;
+        }
+    }
+
+    .body {
+        @include flex(column, flex-start, stretch, 16px);
+    }
+
+    .buttons {
+        @include flex(row, flex-end, center, 10px);
+        width: 100%;
+    }
+}
+
+@keyframes dialogAppear {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+@keyframes bgAppear {
+    from {
+        background: transparent;
+        backdrop-filter: blur(0);
+    }
+}
+
+@keyframes dialogDisappear {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+@keyframes bgDisappear {
+    to {
+        background: transparent;
+        backdrop-filter: blur(0);
+    }
+}

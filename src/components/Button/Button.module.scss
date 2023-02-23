@@ -1,0 +1,106 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.button {
+    @include clearDefaultStyle;
+    @include flex(row, center, center, 8px);
+    @include clickable;
+
+    padding: 12px 20px;
+    border-radius: 8px;
+    color: $colorTextAction;
+    font-weight: 600;
+    transition: 0.25s ease opacity;
+
+    .icon {
+        height: 20px;
+    }
+
+    &.disabled {
+        opacity: 0.5;
+        pointer-events: none;
+    }
+
+    &.small {
+        padding: 12px;
+        .icon {
+            height: 32px;
+        }
+    }
+
+    &.primary {
+        background: $colorPrimary;
+        &:hover {
+            background: lighten($colorPrimary, 5%);
+        }
+        &:active {
+            background: darken($colorPrimary, 5%);
+        }
+    }
+    &.secondary {
+        background: $colorBg2;
+        &:hover {
+            background: lighten($colorBg2, 5%);
+        }
+        &:active {
+            background: darken($colorBg2, 5%);
+        }
+    }
+    &.info {
+        background: $colorSecondaryInfo;
+        &:hover {
+            background: lighten($colorSecondaryInfo, 5%);
+        }
+        &:active {
+            background: darken($colorSecondaryInfo, 5%);
+        }
+    }
+    &.warn {
+        background: $colorSecondaryWarn;
+        color: $colorTextContrast;
+        &:hover {
+            background: lighten($colorSecondaryWarn, 10%);
+        }
+        &:active {
+            background: darken($colorSecondaryWarn, 10%);
+        }
+        .icon {
+            filter: invert(1);
+        }
+    }
+    &.danger {
+        background: $colorSecondaryDanger;
+        &:hover {
+            background: lighten($colorSecondaryDanger, 5%);
+        }
+        &:active {
+            background: darken($colorSecondaryDanger, 5%);
+        }
+    }
+}
+
+.loader {
+    display: block;
+    width: 20px;
+    height: 20px;
+    margin: 0 20px;
+    border-radius: 100%;
+    border: 4px solid currentColor;
+    border-top-color: transparent;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes textAppear {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}

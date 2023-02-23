@@ -1,0 +1,6 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(row, center, center, 10px);
+}

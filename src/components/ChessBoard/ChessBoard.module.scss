@@ -1,0 +1,101 @@
+@import '../../styles/variables.scss';
+@import '../../styles/mixins.scss';
+
+.board {
+    position: relative;
+    overflow: hidden;
+    width: fit-content;
+    height: fit-content;
+    --cell-size: 80px;
+    user-select: none;
+
+    .boardCells {
+        @include flex(column, center, center);
+        border-radius: 16px;
+        overflow: hidden;
+
+        .rank {
+            @include flex(row, center, center);
+        }
+    
+        .file {
+            @include flex(row, center, center);
+            width: var(--cell-size);
+            height: var(--cell-size);
+            position: relative;
+    
+            &.white {
+                background: $colorBoardWhite;
+                color: $colorBoardBlack;
+            }
+            &.black {
+                background: $colorBoardBlack;
+                color: $colorBoardWhite;
+            }
+    
+            .rankText, .fileText {
+                position: absolute;
+                font-size: calc(var(--cell-size) * 0.2);
+                font-weight: 600;
+            }
+            .rankText {
+                top: calc(var(--cell-size) * 0.1);
+                left: calc(var(--cell-size) * 0.1);
+            }
+            .fileText {
+                bottom: calc(var(--cell-size) * 0.1);
+                right: calc(var(--cell-size) * 0.1);
+            }
+        }
+    }
+
+    .boardMoveOptions {
+        .moveOption {
+            position: absolute;
+            width:  var(--cell-size);
+            height: var(--cell-size);
+            bottom: calc(var(--cell-size) * var(--y));
+            left:   calc(var(--cell-size) * var(--x));
+            z-index: 5;
+            cursor: pointer;
+            &::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                bottom: 0;
+                right: 0;
+                background: $colorPrimary;
+                opacity: 0.5;
+                border: 5px solid black;
+                border-radius: 100%;
+                animation: moveOptionAppear 0.2s ease;
+                animation-fill-mode: both;
+            }
+        }
+    }
+}
+
+@media screen and (max-height: 800px) {
+    .board {
+        --cell-size: 50px;
+        .boardCells {
+            border-radius: 8px;
+        }
+    }
+}
+
+@media screen and (max-width: 690px) {
+    .board {
+        --cell-size: calc((100vw - 96px) / 8);
+    }
+}
+
+@keyframes moveOptionAppear {
+    from {
+        transform: scale(0);
+    }
+    to {
+        transform: scale(0.36);
+    }
+}

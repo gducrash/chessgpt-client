@@ -1,0 +1,32 @@
+@import '../../styles/variables';
+@import '../../styles/mixins';
+
+.container {
+    @include flex(row, flex-start, center, 16px);
+    width: 100%;
+    background: $colorBgCard;
+    border-radius: 16px;
+    padding: 16px 32px;
+    font-size: 20px;
+    font-weight: 600;
+    color: $colorTextHint;
+
+    .turn {
+        height: 32px;
+        width: 32px;
+        border-radius: 8px;
+
+        &.white {
+            background: white;
+            border: 3px solid black;
+        }
+        &.black {
+            background: black;
+            border: 3px solid white;
+        }
+    }
+
+    span {
+        margin-top: -4px;
+    }
+}

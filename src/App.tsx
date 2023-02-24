@@ -90,12 +90,15 @@ const App = () => {
 
     const [ textCount, setTextCount ] = useState(0);
 
+    const gameStarted = !!sessionData && !sessionData.gameEnd;
+    const gameError = gameStarted && !!sessionError;
+
     useEffect(() => {
         setTextCount(t => t+1);
     }, [sessionData?.response]);
 
     useEffect(() => {
-        if (soundOverride)
+        if (soundOverride || !gameStarted)
             return;
         if (sessionData?.gameEnd)
             sounds.end();
@@ -105,13 +108,11 @@ const App = () => {
 
     useEffect(() => {
         if (soundOverride) {
-            sounds[soundOverride]?.();
+            if (gameStarted && !gameError)
+                sounds[soundOverride]?.();
             setSoundOverride(null);
         }
     }, [soundOverride]);
-
-    const gameStarted = !!sessionData && !sessionData.gameEnd;
-    const gameError = gameStarted && !!sessionError;
 
     return (
         <SessionContext.Provider value={sessionContext}>
@@ -134,7 +135,9 @@ const App = () => {
                             setTimeout(() => console.log(sessionData?.sound), 10);
                         }}
                         reRenderBoard={() => {
-                            setSessionData({...sessionData, turn: 'black'} as any);
+                            const newSessionData: GameSessionData = structuredClone(sessionData);
+                            newSessionData.turn = 'black';
+                            setSessionData(newSessionData);
                         }}
                     />
 

@@ -236,6 +236,38 @@ const ChessBoard = ({
         return true;
     }
 
+    const handleMoveOptionSelect = async (option: MoveOption) => {
+        if (!selectedPiece) return;
+
+        // copy board into prevBoardState
+        const prevBoard = structuredClone(board);
+        session.boardPrevState!.current = prevBoard;
+
+        await handleMove(selectedPiece, option.to.x, option.to.y);
+        setMoveOptions([]);
+
+        // remove black pieces on to coord
+        if (board) {
+            board.items = board.items.filter(item => {
+                if (item.color === 'black' && item.coord.x === option.to.x && item.coord.y === option.to.y) return false;
+                return true;
+            });
+        }
+
+        // update select item coords
+        selectedPiece.lastCoord = selectedPiece.coord;
+        selectedPiece.coord = option.to;
+
+        // remove animations for other items
+        board?.items.forEach(item => {
+            if (item === selectedPiece) return;
+            item.lastCoord = item.coord;
+        });
+
+        // re-render board
+        reRenderBoard?.();
+    }
+
     return (
         <>
         { promoteDialogOpen && promoteDialog }
@@ -257,35 +289,7 @@ const ChessBoard = ({
                             e.stopPropagation();
                         }}
                         onClick={async () => {
-                            if (!selectedPiece) return;
-
-                            // copy board into prevBoardState
-                            const prevBoard = structuredClone(board);
-                            session.boardPrevState!.current = prevBoard;
-
-                            await handleMove(selectedPiece, option.to.x, option.to.y);
-                            setMoveOptions([]);
-
-                            // remove black pieces on to coord
-                            if (board) {
-                                board.items = board.items.filter(item => {
-                                    if (item.color === 'black' && item.coord.x === option.to.x && item.coord.y === option.to.y) return false;
-                                    return true;
-                                });
-                            }
-
-                            // update select item coords
-                            selectedPiece.lastCoord = selectedPiece.coord;
-                            selectedPiece.coord = option.to;
-
-                            // remove animations for other items
-                            board?.items.forEach(item => {
-                                if (item === selectedPiece) return;
-                                item.lastCoord = item.coord;
-                            });
-
-                            // re-render board
-                            reRenderBoard?.();
+                            await handleMoveOptionSelect(option);
                         }}
 
                         key={[option.to.x, option.to.y].join()} 
@@ -297,27 +301,34 @@ const ChessBoard = ({
                 )) }
             </div>
             <div className={classes.boardPieces}>
-                {board?.items.map(item => (
-                    <ChessPiece 
-                        item={item} 
-                        selectable={item.color === 'white' && playable} 
-                        key={
-                            item.color + 
-                            item.piece + 
-                            coordToString(item.coord) + 
-                            pieceResetCounter
-                        }
-                        onSelect={() => {
-                            handlePieceSelect(item);
-                        }}
-                        onDragEnd={async (x, y) => {
-                            return await handleMove(item, x, y);
-                        }}
-                        countWhole={getSquareCountData(item)?.length ?? 1}
-                        count={getSquareCountData(item)?.indexOf(item) ?? 0}
-                        resetCounter={pieceResetCounter}
-                    />
-                ))}
+                {board?.items.map(item => {
+                    const countWhole = getSquareCountData(item)?.length ?? 1;
+                    const count = getSquareCountData(item)?.indexOf(item) ?? 0;
+                    
+                    return (
+                        <ChessPiece 
+                            item={item} 
+                            selectable={item.color === 'white' && playable} 
+                            key={
+                                item.color + 
+                                item.piece + 
+                                coordToString(item.coord) + 
+                                pieceResetCounter + ' ' +
+                                countWhole + ' ' +
+                                count
+                            }
+                            onSelect={() => {
+                                handlePieceSelect(item);
+                            }}
+                            onDragEnd={async (x, y) => {
+                                return await handleMove(item, x, y);
+                            }}
+                            countWhole={countWhole}
+                            count={count}
+                            resetCounter={pieceResetCounter}
+                        />
+                    )
+                })}
             </div>
         </div>
         </>

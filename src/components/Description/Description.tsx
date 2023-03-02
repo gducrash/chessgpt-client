@@ -31,7 +31,7 @@ const Description = () => (
             </ul>
         </div>
     </div>
-    </div>
+    </div> 
 );
 
 export default Description;

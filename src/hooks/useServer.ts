@@ -1,10 +1,11 @@
 import axios from "axios";
 
 import { SERVER } from "../util/constants";
-import { GameMove } from "../util/types";
+import { GameMove, GameSessionData } from "../util/types";
 
 import { SessionContextType } from "../context/sessionContext";
 import { generateMoveString } from "../util/functions";
+import { isCheckmate } from "../util/moves";
 
 export type ServerError = {
     type: string;
@@ -108,7 +109,7 @@ export const useServer = (context: SessionContextType) => {
         }
     }
 
-    const makeMove = async (move: GameMove) => {
+    const makeMove = async (move: GameMove, nested: boolean = false) => {
         setError(null);
         setLoading(true);
         setTurnTo('black');
@@ -131,7 +132,19 @@ export const useServer = (context: SessionContextType) => {
         }
 
         if (res.status === 200) {
-            setData({ ...data, ...res.data });
+            const newData: GameSessionData = { ...data, ...res.data };
+            setData(newData);
+            if (isCheckmate(newData.board, "white") && !nested) {
+                setTimeout(() => {
+                    const kingPos = newData.board.items.find(p => p.piece === 'king' && p.color === 'white')?.coord;
+                    makeMove({
+                        piece: 'king',
+                        from: kingPos ?? { x: 0, y: 0 },
+                        to: kingPos ?? { x: 0, y: 0 },
+                        selfCheckmate: true,
+                    }, true);
+                }, 0);
+            }
             return res.data;
         } else {
             setTurnTo('white');

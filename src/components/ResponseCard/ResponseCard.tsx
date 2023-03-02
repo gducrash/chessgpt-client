@@ -11,6 +11,7 @@ type ResponseCardProps = {
     loading?: boolean;
     disabled?: boolean;
     parseError?: boolean;
+    animating?: boolean;
 }
 
 const ResponseCard = ({ 
@@ -19,7 +20,8 @@ const ResponseCard = ({
     textCount = 0,
     loading, 
     disabled, 
-    parseError 
+    parseError,
+    animating,
 }: ResponseCardProps) => {
 
     return (
@@ -31,7 +33,9 @@ const ResponseCard = ({
         })}>
             <div className={classes.col}>
                 <img src={bot ? botAvatar : userAvatar} alt="Avatar" className={classes.avatar} draggable={false} />
-                <div className={classes.text}>
+                <div className={cn(classes.text, {
+                    [classes.animating]: animating
+                })}>
                     {text.split(' ').map((word, index) => (
                         <span key={textCount.toString() + ", " + index.toString()} style={{
                             animationDelay: `${index * 0.1}s`

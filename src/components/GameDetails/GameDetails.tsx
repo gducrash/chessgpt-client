@@ -2,16 +2,11 @@ import { useRef } from 'react';
 import cn from 'classnames';
 
 import classes from './GameDetails.module.scss';
-import { USER_COLORS, NONE_COLOR } from '../../util/constants';
 
 import iconKey from '../../assets/icons/iconKey.svg';
-import iconServer from '../../assets/icons/iconServer.svg';
-import iconUser from '../../assets/icons/iconUser.svg';
 
 type GameDetailsProps = {
     sessionId: string;
-    serverId?: number;
-    user?: string;
 }
 
 type InfoBlockRowProps = {
@@ -23,19 +18,9 @@ type InfoBlockRowProps = {
     copyable?: boolean;
 }
 
-const GameDetails = ({ sessionId, serverId, user }: GameDetailsProps) => {
+const GameDetails = ({ sessionId }: GameDetailsProps) => {
     
     const copyTimerRef = useRef<number|null>(null);
-
-    const getUserColor = (user?: string) => {
-        if (!user) return NONE_COLOR;
-
-        let sum = 0;
-        for (let i = 0; i < user.length; i++) {
-            sum += user.charCodeAt(i);
-        }
-        return USER_COLORS[sum % USER_COLORS.length];
-    }
 
     const InfoBlockRow = ({ 
         icon, color, text, title,
@@ -70,10 +55,6 @@ const GameDetails = ({ sessionId, serverId, user }: GameDetailsProps) => {
         <div className={classes.container}>
             <div className={classes.infoBlock}>
                 <InfoBlockRow icon={iconKey} color="#10a37f" text={sessionId} title="Session ID" primary copyable />
-                <div className={classes.row}>
-                    <InfoBlockRow icon={iconServer} color={NONE_COLOR} text={serverId ? "Server #" + serverId.toString() : "None"} title="Server ID" />
-                    <InfoBlockRow icon={iconUser} color={getUserColor(user)} text={user ?? "None"} title="User" />
-                </div>
             </div>
         </div>    
     );

@@ -1,6 +1,4 @@
 export type GameSessionData = { 
-    serverId?: number;
-    user?: string;
     turn: 'white' | 'black';
     move: GameMove;
     board: Board;

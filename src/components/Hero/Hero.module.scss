@@ -51,4 +51,9 @@
         color: lighten($colorSecondaryDanger, 30%);
         box-shadow: 0 0 20px rgba($colorSecondaryDanger, 0.25);
     }
+    &.success {
+        background: rgba($colorPrimary, 0.4);
+        color: lighten($colorPrimary, 30%);
+        box-shadow: 0 0 20px rgba($colorPrimary, 0.25);
+    }
 }

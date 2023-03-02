@@ -13,6 +13,9 @@ const Hero = () => (
         </h1>
         <p>Play chess against the all-mighty ChatGPT!</p>
         <span className={classes.badge}>Early Beta</span>
+        <div className={cn(classes.message, classes.success)}>
+            We updated our website to use the official ChatGPT API! It should now respond a lot faster and with no rate limits. 🥳
+        </div>
         { IS_SERVER_LOADED && (
             <div className={cn(classes.message, classes.warn)}>
                 Our servers are currently at high demand and most of the users get rate limited by ChatGPT.

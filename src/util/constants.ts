@@ -95,9 +95,3 @@ export const DEFAULT_BOARD = (): Board => ({
         enPassant: null,
     },
 });
-
-export const USER_COLORS = [
-    '#4152E9', '#3CA4FF', '#82DF3A',
-    '#EF7E15', '#E93067', '#6B30E9',
-];
-export const NONE_COLOR = '#555980';

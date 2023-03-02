@@ -98,7 +98,7 @@ const App = () => {
     }, [sessionData?.response]);
 
     useEffect(() => {
-        if (soundOverride || !gameStarted)
+        if (soundOverride)
             return;
         if (sessionData?.gameEnd)
             sounds.end();
@@ -147,7 +147,7 @@ const App = () => {
                         { gameStarted ? <TurnInfo turn={sessionData?.turn ?? "white"} /> : <div></div> }
 
                         <div className="col">     
-                            <ResponseCard bot
+                            <ResponseCard bot animating
                                 text={!sessionLoading ? (sessionData?.response || "") : ""}
                                 textCount={textCount}
                                 loading={sessionLoading}
@@ -171,8 +171,6 @@ const App = () => {
 
                 { gameStarted && <GameDetails 
                     sessionId={sessionId ?? ''}
-                    serverId={sessionData?.serverId}
-                    user={sessionData?.user}
                 /> }
 
                 <Description />

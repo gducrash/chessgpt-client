@@ -61,9 +61,11 @@
             font-size: 16px;
         }
 
-        span {
-            animation: textAppear 0.2s ease-out;
-            animation-fill-mode: backwards;
+        &.animating {
+            span {
+                animation: textAppear 0.2s ease-out;
+                animation-fill-mode: backwards;
+            }
         }
     }
 

@@ -23,14 +23,15 @@
             font-size: 12px;
             display: inline-block;
             padding: 4px 8px;
-            background: $colorBg2;
-            color: $colorPrimary;
+            background: lighten($colorPrimary, 10%);
+            color: $colorTextContrast;
             border-radius: 4px;
         }
 
         p {
             color: $colorTextHint;
             font-size: 18px;
+            line-height: 1.6;
         }
     }
 }

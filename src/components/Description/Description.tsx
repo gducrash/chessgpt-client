@@ -26,13 +26,8 @@ const Description = () => (
                 <img src={iconWarn} className={classes.icon} alt="icon" />
                 <h2>Limitations</h2>
                 <li>May refuse your moves</li>
-                <li>The servers are very unreliable, so good luck!</li>
-                <li> 
-                    { Math.random() < 0.8 
-                    ? "Limited knowledge of chess events after 2021"
-                    : "One piece is not real yet"
-                    } 
-                </li>
+                <li>The system might parse bot responses incorrectly</li>
+                <li>Limited knowledge of chess events after 2021</li>
             </ul>
         </div>
     </div>

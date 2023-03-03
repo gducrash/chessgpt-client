@@ -17,6 +17,7 @@
     @media screen and (max-width: 1340px) {
         width: calc(100% - 96px);
         flex-direction: column;
+        gap: 16px;
     }
 
     .controlsBlock {

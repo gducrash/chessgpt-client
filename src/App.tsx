@@ -198,7 +198,7 @@ const App = () => {
                     { sessionError.message }
                 </ErrorMessage> }
 
-                { gameStarted && <GameDetails 
+                { (gameStarted || sessionData) && <GameDetails 
                     sessionId={sessionId ?? ''}
                     goBack={() => {
                         boardHistory.moveBackward();

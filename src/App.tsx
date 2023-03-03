@@ -7,6 +7,7 @@ import { GameSessionData, GameSound, Board } from './util/types';
 
 import { SessionContext } from './context/sessionContext';
 import { ServerError } from './hooks/useServer';
+import { useHistory } from './hooks/useHistory';
 
 import Hero from './components/Hero';
 import GameManager from './components/GameManager';
@@ -30,7 +31,6 @@ import soundGameStart from './assets/sounds/game-start.mp3';
 import soundGameEnd from './assets/sounds/game-end.mp3';
 
 import artKingTroll from './assets/art/kingtroll.png';
-import { useHistory } from './hooks/useHistory';
 
 const App = () => {
 
@@ -91,6 +91,7 @@ const App = () => {
     const [ sessionLoading, setSessionLoading ] = useState(false);
     const [ playerMove, setPlayerMove ] = useState("");
     const [ soundOverride, setSoundOverride ] = useState<GameSound|null>(null);
+    const [ pencilEnabled, setPencilEnabled ] = useState(false);
     const boardPrevState = useRef<any|null>(null);
     const boardHistory = useHistory<Board>();
 
@@ -99,8 +100,8 @@ const App = () => {
         data: sessionData, setData: setSessionData,
         error: sessionError, setError: setSessionError,
         loading: sessionLoading, setLoading: setSessionLoading,
-        sounds, playerMove, setPlayerMove, 
-        boardPrevState, boardHistory
+        sounds, playerMove, setPlayerMove, pencilEnabled, setPencilEnabled,
+        boardPrevState, boardHistory,
     };
 
     const [ textCount, setTextCount ] = useState(0);
@@ -166,6 +167,7 @@ const App = () => {
                         }}
                         isLast={boardHistory.isLast}
                         animating={boardHistory.isLast || lastMovedForward}
+                        pencilEnabled={pencilEnabled}
                     />
 
                     <div className={cn("contentBlock", {
@@ -208,6 +210,8 @@ const App = () => {
                     }}
                     canGoBack={boardHistory.canMoveBackward}
                     canGoForward={boardHistory.canMoveForward}
+                    pencilEnabled={pencilEnabled}
+                    togglePencil={() => setPencilEnabled(!pencilEnabled)}
                 /> }
 
                 <Description />

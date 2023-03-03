@@ -17,6 +17,7 @@ import whiteKnight from '../../assets/pieces/white-knight.svg';
 import whiteBishop from '../../assets/pieces/white-bishop.svg';
 import whiteRook   from '../../assets/pieces/white-rook.svg';
 import whiteQueen  from '../../assets/pieces/white-queen.svg';
+import Canvas from '../Canvas';
 
 export type MoveOptionsMap = Map<BoardItem, MoveOption[]>;
 
@@ -29,6 +30,7 @@ type ChessBoardProps = {
     reRenderBoard?: () => void;
     isLast?: boolean;
     animating?: boolean;
+    pencilEnabled?: boolean;
 };
 
 const ranks = [...RANKS].reverse();
@@ -40,6 +42,7 @@ const ChessBoard = ({
     reRenderBoard,
     isLast,
     animating,
+    pencilEnabled,
 }: ChessBoardProps) => {
 
     const session = useContext(SessionContext);
@@ -314,7 +317,7 @@ const ChessBoard = ({
                     return (
                         <ChessPiece 
                             item={item} 
-                            selectable={item.color === 'white' && playable} 
+                            selectable={item.color === 'white' && playable && !pencilEnabled} 
                             key={
                                 item.color + 
                                 item.piece + 
@@ -337,6 +340,7 @@ const ChessBoard = ({
                     )
                 })}
             </div>
+            { pencilEnabled && <Canvas width={512} height={512} /> }
         </div>
         </>
     );

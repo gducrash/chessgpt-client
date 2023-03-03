@@ -15,6 +15,8 @@ export type SessionContextType = {
     sounds: any;
     playerMove: string;
     setPlayerMove: (move: string) => void;
+    pencilEnabled: boolean;
+    setPencilEnabled: (enabled: boolean) => void;
     boardPrevState?: MutableRefObject<any|null>;
     boardHistory?: UseHistoryReturn<Board>;
 }
@@ -31,4 +33,6 @@ export const SessionContext = createContext<SessionContextType>({
     sounds: {},
     playerMove: '',
     setPlayerMove: () => {},
+    pencilEnabled: false,
+    setPencilEnabled: () => {},
 });

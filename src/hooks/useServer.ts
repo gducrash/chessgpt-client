@@ -18,7 +18,8 @@ export const useServer = (context: SessionContextType) => {
     const { 
         id, setId, data, setData, 
         setError, setLoading, sounds,
-        setPlayerMove, boardPrevState, boardHistory,
+        setPlayerMove, setPencilEnabled,
+        boardPrevState, boardHistory,
     } = context;
 
     const post = async (endpoint: string, data: any = {}) => {
@@ -60,6 +61,7 @@ export const useServer = (context: SessionContextType) => {
     const createSession = async () => {
         setError(null);
         setLoading(true);
+        setPencilEnabled(false);
         boardHistory?.clearHistory(DEFAULT_BOARD());
 
         let res;

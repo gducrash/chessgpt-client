@@ -6,6 +6,7 @@ import classes from './GameDetails.module.scss';
 import iconKey from '../../assets/icons/iconKey.svg';
 import iconBack from '../../assets/icons/iconBack.svg';
 import iconForward from '../../assets/icons/iconForward.svg';
+import iconPencil from '../../assets/icons/iconPencil.svg';
 
 import Button from '../Button';
 
@@ -15,6 +16,8 @@ type GameDetailsProps = {
     goForward?: () => void;
     canGoBack?: boolean;
     canGoForward?: boolean;
+    pencilEnabled?: boolean;
+    togglePencil?: () => void;
 }
 
 type InfoBlockRowProps = {
@@ -35,10 +38,16 @@ const GameDetails = ({
     goForward,
     canGoBack,
     canGoForward,
+    pencilEnabled,
+    togglePencil,
 }: GameDetailsProps) => {
     
     const copyTimerRef = useRef<number|null>(null);
     const [ sessionIdHidden, setSessionIdHidden ] = useState(true);
+
+    useEffect(() => {
+        setSessionIdHidden(true);
+    }, [sessionId]);
 
     const InfoBlockRow = ({ 
         icon, color, text, title,
@@ -119,6 +128,12 @@ const GameDetails = ({
                 />
             </div>
             <div className={classes.controlsBlock}>
+                <Button
+                    text="" icon={iconPencil}
+                    size='small'
+                    variation={pencilEnabled ? 'primary' : 'secondary'}
+                    onClick={togglePencil}
+                />
                 <Button
                     text="" icon={iconBack}
                     size='small'

@@ -5,7 +5,7 @@
     @include flex(row, space-between, center);
     width: 1188px;
     background: $colorBg1;
-    padding: 16px 32px;
+    padding: 16px 24px;
     border-radius: 8px;
     animation: appear 0.5s ease;
     overflow: hidden;
@@ -35,16 +35,28 @@
 
             .infoRowIcon {
                 @include flex(row, center, center);
-                height: 32px;
-                width: 32px;
-                border-radius: 4px;
+                height: 42px;
+                width: 42px;
+                border-radius: 8px;
                 flex-shrink: 0;
+                margin-right: 8px;
             }
             .infoRowText {
                 font-weight: 500;
+                font-size: 16px;
                 color: $colorTextHint;
                 &.primary {
                     color: $colorTextNormal;
+                }
+            }
+            .infoRowLink {
+                all: unset;
+                @include clickable;
+                color: $colorSecondaryInfo;
+                font-weight: 500;
+                text-decoration: underline;
+                &:hover {
+                    color: $colorTextAction;
                 }
             }
             .infoRowButton {

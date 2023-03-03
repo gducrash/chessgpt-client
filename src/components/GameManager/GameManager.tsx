@@ -46,6 +46,7 @@ const GameManager = ({
             if (err) {
                 setDialogLoadError(err);
             } else {
+                sessionContext.sounds.stopAllSounds?.();
                 sessionContext.sounds.gameStart?.();
                 closeDialogLoad();
             }

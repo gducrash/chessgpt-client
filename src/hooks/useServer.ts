@@ -28,6 +28,7 @@ export const useServer = (context: SessionContextType) => {
     }
 
     const error = (type: string, err: any) => {
+        sounds.stopAllSounds?.();
         sounds.error?.();
         const errorText = (err as any)?.response?.data?.error ?? 'Network error';
         setError({
@@ -70,6 +71,7 @@ export const useServer = (context: SessionContextType) => {
         setLoading(false);
 
         if (!res) {
+            sounds.stopAllSounds?.();
             sounds.error?.();
             return null;
         }
@@ -77,6 +79,7 @@ export const useServer = (context: SessionContextType) => {
         if (res.status === 200) {
             setId(res.data.id);
             setData(res.data.session);
+            sounds.stopAllSounds?.();
             sounds.gameStart?.();
             return res.data.session;
         } else {

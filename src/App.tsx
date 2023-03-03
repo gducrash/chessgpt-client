@@ -48,28 +48,40 @@ const App = () => {
         </main>
     );
 
-    const [ playNormal ] = useSound(soundNormal);
-    const [ playMoveSelf ] = useSound(soundMoveSelf);
-    const [ playCapture ] = useSound(soundCapture);
-    const [ playCheck ] = useSound(soundCheck);
-    const [ playCastle ] = useSound(soundCastle);
-    const [ playSpawn ] = useSound(soundSpawn);
-    const [ playPromote ] = useSound(soundPromote);
-    const [ playError ] = useSound(soundError);
-    const [ playGameStart ] = useSound(soundGameStart);
-    const [ playGameEnd ] = useSound(soundGameEnd);
+    const [ playNormal,    { stop: stopNormal    } ] = useSound(soundNormal);
+    const [ playMoveSelf,  { stop: stopMoveSelf  } ] = useSound(soundMoveSelf);
+    const [ playCapture,   { stop: stopCapture   } ] = useSound(soundCapture);
+    const [ playCheck,     { stop: stopCheck     } ] = useSound(soundCheck);
+    const [ playCastle,    { stop: stopCastle    } ] = useSound(soundCastle);
+    const [ playSpawn,     { stop: stopSpawn     } ] = useSound(soundSpawn);
+    const [ playPromote,   { stop: stopPromote   } ] = useSound(soundPromote);
+    const [ playError,     { stop: stopError     } ] = useSound(soundError);
+    const [ playGameStart, { stop: stopGameStart } ] = useSound(soundGameStart);
+    const [ playGameEnd,   { stop: stopGameEnd   } ] = useSound(soundGameEnd);
 
     const sounds: any = {
-        normal: playNormal,
-        moveSelf: playMoveSelf,
-        capture: playCapture,
-        check: playCheck,
-        castle: playCastle,
-        spawn: playSpawn,
-        promote: playPromote,
-        error: playError,
+        normal:    playNormal,
+        moveSelf:  playMoveSelf,
+        capture:   playCapture,
+        check:     playCheck,
+        castle:    playCastle,
+        spawn:     playSpawn,
+        promote:   playPromote,
+        error:     playError,
         gameStart: playGameStart,
-        end: playGameEnd,
+        end:       playGameEnd,
+        stopAllSounds: () => {
+            stopNormal();
+            stopMoveSelf();
+            stopCapture();
+            stopCheck();
+            stopCastle();
+            stopSpawn();
+            stopPromote();
+            stopError();
+            stopGameStart();
+            stopGameEnd();
+        }
     };
     
     const [ sessionId, setSessionId ] = useState('');
@@ -100,16 +112,22 @@ const App = () => {
     useEffect(() => {
         if (soundOverride)
             return;
-        if (sessionData?.gameEnd)
+        if (sessionData?.gameEnd) {
+            sounds.stopAllSounds();
             sounds.end();
-        else if (sessionData?.sound)
+        }
+        else if (sessionData?.sound) {
+            sounds.stopAllSounds();
             sounds[sessionData.sound]?.();
+        }
     }, [sessionData]);
 
     useEffect(() => {
         if (soundOverride) {
-            if (gameStarted && !gameError)
+            if (gameStarted && !gameError) {  
+                sounds.stopAllSounds();
                 sounds[soundOverride]?.();
+            }
             setSoundOverride(null);
         }
     }, [soundOverride]);

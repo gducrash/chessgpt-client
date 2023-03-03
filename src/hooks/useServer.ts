@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { SERVER } from "../util/constants";
+import { DEFAULT_BOARD, SERVER } from "../util/constants";
 import { GameMove, GameSessionData } from "../util/types";
 
 import { SessionContextType } from "../context/sessionContext";
@@ -18,7 +18,7 @@ export const useServer = (context: SessionContextType) => {
     const { 
         id, setId, data, setData, 
         setError, setLoading, sounds,
-        setPlayerMove, boardPrevState
+        setPlayerMove, boardPrevState, boardHistory,
     } = context;
 
     const post = async (endpoint: string, data: any = {}) => {
@@ -60,6 +60,7 @@ export const useServer = (context: SessionContextType) => {
     const createSession = async () => {
         setError(null);
         setLoading(true);
+        boardHistory?.clearHistory(DEFAULT_BOARD());
 
         let res;
         try {
@@ -137,6 +138,12 @@ export const useServer = (context: SessionContextType) => {
         if (res.status === 200) {
             const newData: GameSessionData = { ...data, ...res.data };
             setData(newData);
+
+            if (newData.beforeBotResponseBoard) {
+                boardHistory?.addHistory(structuredClone(newData.beforeBotResponseBoard), 0);
+            }
+            boardHistory?.addHistory(structuredClone(newData.board));
+
             if (isCheckmate(newData.board, "white") && !nested) {
                 setTimeout(() => {
                     const kingPos = newData.board.items.find(p => p.piece === 'king' && p.color === 'white')?.coord;

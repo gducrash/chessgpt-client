@@ -6,6 +6,7 @@ export type GameSessionData = {
     date?: Date;
     gameEnd?: boolean; 
     sound?: GameSound;
+    beforeBotResponseBoard?: Board;
 };
 
 export type GameMove = {

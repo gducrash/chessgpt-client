@@ -25,6 +25,7 @@ type ChessPieceProps = {
     countWhole?: number;
     count?: number;
     resetCounter?: number;
+    animating?: boolean;
 };
 
 const PIECE_X_OFFSET = 0.4;
@@ -33,7 +34,8 @@ const ChessPiece = ({
     item, selectable,
     onSelect, onDragEnd,
     count = 0, countWhole = 1,
-    resetCounter = 0,
+    resetCounter = 0, 
+    animating = false,
 }: ChessPieceProps) => {
 
     const [ pos, setPos ] = useState({ x: 0, y: 0 });
@@ -66,7 +68,7 @@ const ChessPiece = ({
 
     useLayoutEffect(() => {
         setPos({ x: item.coord.x, y: item.coord.y });
-        if (item.lastCoord) {
+        if (item.lastCoord && animating) {
             if (item.lastCoord.x === item.coord.x && item.lastCoord.y === item.coord.y)
                 return;
 
@@ -84,7 +86,6 @@ const ChessPiece = ({
                 easing: 'ease-out',
                 iterations: 1,
             });
-
         }
     }, [item, resetCounter]);
 
@@ -154,7 +155,7 @@ const ChessPiece = ({
         <div ref={pieceRef} className={cn(classes.piece, {
             [classes.selectable]: selectable,
             [classes.dragging]: dragging,
-            [classes.white]: item.color === 'white'
+            [classes.white]: item.color === 'white',
         })} style={{
             '--x': pos.x,
             '--y': pos.y,

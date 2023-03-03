@@ -26,7 +26,7 @@ type DialogButton = {
         | 'info'
         | 'warn'
         | 'danger';
-    size?: 'normal' | 'small';
+    size?: 'normal' | 'small' | 'big';
     disabled?: boolean;
     loading?: boolean;
 }

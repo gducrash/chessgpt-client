@@ -1,6 +1,7 @@
 import { createContext, MutableRefObject } from 'react';
+import { UseHistoryReturn } from '../hooks/useHistory';
 import { ServerError } from '../hooks/useServer';
-import { GameSessionData } from '../util/types';
+import { Board, GameSessionData } from '../util/types';
 
 export type SessionContextType = {
     id: string;
@@ -15,6 +16,7 @@ export type SessionContextType = {
     playerMove: string;
     setPlayerMove: (move: string) => void;
     boardPrevState?: MutableRefObject<any|null>;
+    boardHistory?: UseHistoryReturn<Board>;
 }
 
 export const SessionContext = createContext<SessionContextType>({

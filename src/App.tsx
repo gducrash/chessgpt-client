@@ -3,7 +3,7 @@ import useSound from 'use-sound';
 import cn from 'classnames';
 
 import { IS_SERVER_OFF, DEFAULT_BOARD } from './util/constants';
-import { GameSessionData, GameSound } from './util/types';
+import { GameSessionData, GameSound, Board } from './util/types';
 
 import { SessionContext } from './context/sessionContext';
 import { ServerError } from './hooks/useServer';
@@ -30,6 +30,7 @@ import soundGameStart from './assets/sounds/game-start.mp3';
 import soundGameEnd from './assets/sounds/game-end.mp3';
 
 import artKingTroll from './assets/art/kingtroll.png';
+import { useHistory } from './hooks/useHistory';
 
 const App = () => {
 
@@ -91,16 +92,19 @@ const App = () => {
     const [ playerMove, setPlayerMove ] = useState("");
     const [ soundOverride, setSoundOverride ] = useState<GameSound|null>(null);
     const boardPrevState = useRef<any|null>(null);
+    const boardHistory = useHistory<Board>();
 
     const sessionContext = {
         id: sessionId, setId: setSessionId,
         data: sessionData, setData: setSessionData,
         error: sessionError, setError: setSessionError,
         loading: sessionLoading, setLoading: setSessionLoading,
-        sounds, playerMove, setPlayerMove, boardPrevState,
+        sounds, playerMove, setPlayerMove, 
+        boardPrevState, boardHistory
     };
 
     const [ textCount, setTextCount ] = useState(0);
+    const [ lastMovedForward, setLastMovedForward ] = useState(true);
 
     const gameStarted = !!sessionData && !sessionData.gameEnd;
     const gameError = gameStarted && !!sessionError;
@@ -110,6 +114,7 @@ const App = () => {
     }, [sessionData?.response]);
 
     useEffect(() => {
+        // play sounds
         if (soundOverride)
             return;
         if (sessionData?.gameEnd) {
@@ -146,8 +151,10 @@ const App = () => {
 
                 <div className="row">
                     <ChessBoard 
-                        board={sessionData?.board ?? DEFAULT_BOARD()} 
-                        playable={sessionData ? sessionData.turn === 'white' : false}
+                        board={(boardHistory.isLast ? sessionData?.board : boardHistory.currentItem) ?? DEFAULT_BOARD()} 
+                        playable={(sessionData && boardHistory.isLast) 
+                            ? sessionData.turn === 'white' 
+                            : false}
                         setSound={sound => {
                             setSoundOverride(sound);
                             setTimeout(() => console.log(sessionData?.sound), 10);
@@ -157,6 +164,8 @@ const App = () => {
                             newSessionData.turn = 'black';
                             setSessionData(newSessionData);
                         }}
+                        isLast={boardHistory.isLast}
+                        animating={boardHistory.isLast || lastMovedForward}
                     />
 
                     <div className={cn("contentBlock", {
@@ -166,14 +175,14 @@ const App = () => {
 
                         <div className="col">     
                             <ResponseCard bot animating
-                                text={!sessionLoading ? (sessionData?.response || "") : ""}
+                                text={(!sessionLoading && boardHistory.isLast) ? (sessionData?.response || "") : ""}
                                 textCount={textCount}
                                 loading={sessionLoading}
                                 disabled={!gameStarted}
                                 parseError={gameStarted && sessionData?.move === null}
                             />
                             <ResponseCard
-                                text={playerMove}
+                                text={boardHistory.isLast ? playerMove : 'You are viewing previous moves.'}
                                 disabled={!gameStarted}
                             />
                         </div> 
@@ -189,6 +198,16 @@ const App = () => {
 
                 { gameStarted && <GameDetails 
                     sessionId={sessionId ?? ''}
+                    goBack={() => {
+                        boardHistory.moveBackward();
+                        setLastMovedForward(false);
+                    }}
+                    goForward={() => {
+                        boardHistory.moveForward();
+                        setLastMovedForward(true);
+                    }}
+                    canGoBack={boardHistory.canMoveBackward}
+                    canGoForward={boardHistory.canMoveForward}
                 /> }
 
                 <Description />

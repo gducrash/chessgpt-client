@@ -27,6 +27,8 @@ type ChessBoardProps = {
     onItemSelect?: (item: BoardItem) => void;
     setSound?: (sound: GameSound) => void;
     reRenderBoard?: () => void;
+    isLast?: boolean;
+    animating?: boolean;
 };
 
 const ranks = [...RANKS].reverse();
@@ -35,7 +37,9 @@ const ChessBoard = ({
     board,
     playable,
     setSound,
-    reRenderBoard
+    reRenderBoard,
+    isLast,
+    animating,
 }: ChessBoardProps) => {
 
     const session = useContext(SessionContext);
@@ -55,10 +59,10 @@ const ChessBoard = ({
         <DialogBox
             title="Promote pawn"
             buttons={[
-                { onClick: () => promoteDialogResult.current = "Q", icon: whiteQueen,  size: 'small', variation: 'secondary', closeDialog: true },
-                { onClick: () => promoteDialogResult.current = "N", icon: whiteKnight, size: 'small', variation: 'secondary', closeDialog: true },
-                { onClick: () => promoteDialogResult.current = "R", icon: whiteRook,   size: 'small', variation: 'secondary', closeDialog: true },
-                { onClick: () => promoteDialogResult.current = "B", icon: whiteBishop, size: 'small', variation: 'secondary', closeDialog: true },
+                { onClick: () => promoteDialogResult.current = "Q", icon: whiteQueen,  size: 'big', variation: 'secondary', closeDialog: true },
+                { onClick: () => promoteDialogResult.current = "N", icon: whiteKnight, size: 'big', variation: 'secondary', closeDialog: true },
+                { onClick: () => promoteDialogResult.current = "R", icon: whiteRook,   size: 'big', variation: 'secondary', closeDialog: true },
+                { onClick: () => promoteDialogResult.current = "B", icon: whiteBishop, size: 'big', variation: 'secondary', closeDialog: true },
             ]}
             onClose={() => {
                 setPromoteDialogClosing(true);
@@ -272,7 +276,9 @@ const ChessBoard = ({
         <>
         { promoteDialogOpen && promoteDialog }
         <div 
-            className={classes.board}
+            className={cn(classes.board, {
+                [classes.history]: !isLast,
+            })}
             onPointerDown={() => {
                 setSelectedPiece(null);
                 setMoveOptions([]);
@@ -323,6 +329,7 @@ const ChessBoard = ({
                             onDragEnd={async (x, y) => {
                                 return await handleMove(item, x, y);
                             }}
+                            animating={animating}
                             countWhole={countWhole}
                             count={count}
                             resetCounter={pieceResetCounter}

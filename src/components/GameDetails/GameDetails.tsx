@@ -1,12 +1,20 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import cn from 'classnames';
 
 import classes from './GameDetails.module.scss';
 
 import iconKey from '../../assets/icons/iconKey.svg';
+import iconBack from '../../assets/icons/iconBack.svg';
+import iconForward from '../../assets/icons/iconForward.svg';
+
+import Button from '../Button';
 
 type GameDetailsProps = {
     sessionId: string;
+    goBack?: () => void;
+    goForward?: () => void;
+    canGoBack?: boolean;
+    canGoForward?: boolean;
 }
 
 type InfoBlockRowProps = {
@@ -21,7 +29,13 @@ type InfoBlockRowProps = {
     hide?: () => void;
 }
 
-const GameDetails = ({ sessionId }: GameDetailsProps) => {
+const GameDetails = ({ 
+    sessionId,
+    goBack,
+    goForward,
+    canGoBack,
+    canGoForward,
+}: GameDetailsProps) => {
     
     const copyTimerRef = useRef<number|null>(null);
     const [ sessionIdHidden, setSessionIdHidden ] = useState(true);
@@ -73,6 +87,23 @@ const GameDetails = ({ sessionId }: GameDetailsProps) => {
         </div>
     );
 
+    const handleKeyDown = (e: KeyboardEvent) => {
+        if (e.key === 'ArrowLeft' && goBack) {
+            e.preventDefault();
+            goBack();
+        }
+        if (e.key === 'ArrowRight' && goForward) {
+            e.preventDefault();
+            goForward();
+        }
+    }
+
+    useEffect(() => {
+        document.addEventListener('keydown', handleKeyDown);
+        return () => document.removeEventListener('keydown', handleKeyDown);
+    }, [goBack, goForward]);
+
+
     return (
         <div className={classes.container}>
             <div className={classes.infoBlock}>
@@ -85,6 +116,22 @@ const GameDetails = ({ sessionId }: GameDetailsProps) => {
                     hidden={sessionIdHidden}
                     show={() => setSessionIdHidden(false)}
                     hide={() => setSessionIdHidden(true)}
+                />
+            </div>
+            <div className={classes.controlsBlock}>
+                <Button
+                    text="" icon={iconBack}
+                    size='small'
+                    variation='secondary' 
+                    onClick={goBack}
+                    disabled={!canGoBack}
+                />
+                <Button
+                    text="" icon={iconForward}
+                    size='small'
+                    variation='secondary'
+                    onClick={goForward}
+                    disabled={!canGoForward}
                 />
             </div>
         </div>    

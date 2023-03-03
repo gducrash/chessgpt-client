@@ -18,6 +18,10 @@
         width: calc(100% - 96px);
     }
 
+    .controlsBlock {
+        @include flex(row, flex-start, flex-start, 8px);
+    }
+
     .infoBlock {
         @include flex(column, flex-start, flex-start, 8px);
 
